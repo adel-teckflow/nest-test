@@ -20,7 +20,7 @@ export class CreateUserDto {
   @Length(3, 20) // Entre 3 et 20 caractères
   username: string
 
-  @IsEmail({}, { message: "Email invalide !" }) // Tu peux personnaliser le message
+  @IsEmail({}, { message: "Email invalide !", }) // Tu peux personnaliser le message
   email: string
 
   @IsInt()

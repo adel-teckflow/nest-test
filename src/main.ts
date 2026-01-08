@@ -9,9 +9,10 @@ async function bootstrap() {
   // Configuration de Swagger
   const config = new DocumentBuilder()
     .setTitle("Mon API NestJS")
-    .setDescription("Documentation interactive des modules Cats, Orders et Users")
+    .setDescription("Documentation interactive des modules  Orders et Users")
     .setVersion("1.0")
-    .addTag("cats") // Tu peux ajouter des tags pour organiser tes routes
+    .addTag("orders, users") // Tu peux ajouter des tags pour organiser tes routes
+    .addBearerAuth()
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
@@ -30,4 +31,4 @@ async function bootstrap() {
 
   await app.listen(process.env.Port ?? 3000)
 }
-bootstrap()
+bootstrap() 

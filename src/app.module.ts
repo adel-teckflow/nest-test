@@ -5,6 +5,7 @@ import { OrdersModule } from "./orders/orders.module"
 import { UsersModule } from "./users/users.module"
 import { MongooseModule } from "@nestjs/mongoose"
 import { ConfigModule, ConfigService } from "@nestjs/config" // 1. Importez ceci
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config" // 1. Importez ceci
 
     OrdersModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,19 +1,25 @@
+import { JwtStrategy } from "./../../jwt.strategy"
 import { Module } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { AuthController } from "./auth.controller"
-import { UsersModule } from "src/users/users.module" // Import du module Users
+import { UsersModule } from "src/users/users.module"
 import { JwtModule } from "@nestjs/jwt"
+import { PassportModule } from "@nestjs/passport"
+import { ConfigService } from "@nestjs/config"
 
 @Module({
   imports: [
-    UsersModule, // On importe le module pour avoir accès au UsersService
-    JwtModule.register({
-      global: true, // Le JWT sera dispo partout
-      secret: "SECRET_KEY_A_METTRE_DANS_ENV", // Remplace par process.env.JWT_SECRET
-      signOptions: { expiresIn: "1d" }, // Le token expire dans 1 jour
+    UsersModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>("JWT_SECRET") || "SECRET_KEY_A_METTRE_DANS_ENV",
+        signOptions: { expiresIn: "7d" },
+      }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

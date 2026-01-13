@@ -1,38 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpCode } from "@nestjs/common"
+import { JwtAuthGuard } from "./../auth/jwt-auth.guard"
+import { Controller, Get, Param, UseGuards } from "@nestjs/common"
 import { UsersService } from "./users.service"
-import { CreateUserDto } from "./dto/create-user.dto"
-import { UpdateUserDto } from "./dto/update-user.dto"
 
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED) // Renvoie 201 explicitement
-  async create(@Body() createUserDto: CreateUserDto) {
-    // NestJS attend la résolution de la promesse avant de répondre au client
-    return await this.usersService.create(createUserDto)
-  }
+  // ⚠️ CRÉATION DÉSACTIVÉE : Utiliser POST /auth/register uniquement
+  // Cela empêche de créer des utilisateurs avec des rôles non autorisés
 
   @Get()
+  @UseGuards(JwtAuthGuard) // Protégé par JWT : seuls les utilisateurs authentifiés peuvent voir la liste
   async findAll() {
     return await this.usersService.findAll()
   }
 
   @Get(":id")
+  @UseGuards(JwtAuthGuard) // Protégé par JWT
   async findOne(@Param("id") id: string) {
-    // Si l'id n'est pas trouvé, le service lancera une 404 que Nest gèrera
     return await this.usersService.findOne(id)
   }
 
-  @Patch(":id")
-  async update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(id, updateUserDto)
-  }
-
-  @Delete(":id")
-  @HttpCode(HttpStatus.NO_CONTENT) // Renvoie 204 (Succès mais pas de contenu à renvoyer)
-  async remove(@Param("id") id: string) {
-    await this.usersService.remove(id)
-  }
+  // ⚠️ MODIFICATION DÉSACTIVÉE : Utiliser le profil utilisateur ou une route admin
+  // ⚠️ SUPPRESSION DÉSACTIVÉE : Fonctionnalité réservée à l'admin
 }

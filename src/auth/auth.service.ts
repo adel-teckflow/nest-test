@@ -32,7 +32,7 @@ export class AuthService {
     }
 
     // 3. Si tout est bon, on génère le token (Payload)
-    const payload = { sub: user._id, email: user.email, role: user.role }
+    const payload = { sub: user._id, email: user.email, role: user.role, name: user.username }
 
     return {
       access_token: await this.jwtService.signAsync(payload),

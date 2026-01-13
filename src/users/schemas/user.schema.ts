@@ -55,8 +55,9 @@ export class User extends Document {
 
 export const UserSchema = SchemaFactory.createForClass(User)
 
-UserSchema.pre("save", async function (next: (err?: Error) => void) {
-  if (!this.isModified("password")) return next()
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    return
+  }
   this.password = await bcrypt.hash(this.password, 10)
-  next()
 })
